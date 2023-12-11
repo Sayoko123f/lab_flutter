@@ -12,18 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => ScoreManager()),
-        ],
-        child: const MyHomePage(),
-      ),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage());
   }
 }
 
@@ -37,11 +31,7 @@ class MyHomePage extends StatelessWidget {
           title: const Text('Hello Title'),
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: const Stack(
-          children: [
-            todo.TodoPage(),
-          ],
-        ));
+        body: const todo.TodoPage());
   }
 }
 

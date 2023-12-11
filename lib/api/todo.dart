@@ -136,8 +136,9 @@ Future<void> delete(String id) async {
   throw HttpException('[Todo.delete] ${res.statusCode} ${res.body}');
 }
 
-Future<Todo> update(String id, {String? title, String? content}) async {
-  final body = {'title': title, 'content': content};
+Future<Todo> update(String id,
+    {String? title, String? content, String? state}) async {
+  final body = {'title': title, 'content': content, 'state': state};
   body.removeWhere((key, value) => value == null);
   final res = await http.patch(_apiUri('todos/$id'),
       headers: _commonHeaders, body: jsonEncode(body));

@@ -6,14 +6,24 @@ import 'package:provider/provider.dart';
 
 import '../../api/todo.dart';
 
+final TodoStore todoStore = TodoStore();
+
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider<TodoStore>(create: (context) => TodoStore()),
-    ], child: const TodoList());
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<TodoStore>(create: (context) => todoStore),
+        ],
+        child: Container(
+          color: Colors.lime,
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [TodoTotalText(), Expanded(child: TodoList())],
+          ),
+        ));
   }
 }
 
@@ -42,14 +52,14 @@ class TodoStore extends ChangeNotifier {
   UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
 }
 
-class TodoText extends StatefulWidget {
-  const TodoText({super.key});
+class TodoTotalText extends StatefulWidget {
+  const TodoTotalText({super.key});
 
   @override
-  State<TodoText> createState() => _TodoTextState();
+  State<TodoTotalText> createState() => _TodoTotalTextState();
 }
 
-class _TodoTextState extends State<TodoText> {
+class _TodoTotalTextState extends State<TodoTotalText> {
   @override
   Widget build(BuildContext context) {
     return Consumer<TodoStore>(
@@ -88,11 +98,25 @@ class TodoItem2 extends StatelessWidget {
         _ => Icons.error
       };
 
+  Future<void> _onLeadingIconPressed() async {
+    debugPrint(item.id);
+    String newState = switch (item.state) {
+      'Pending' => 'Progress',
+      'Progress' => 'Resolved',
+      'Resolved' => 'Pending',
+      _ => 'Progress'
+    };
+    await update(item.id, state: newState);
+    await todoStore.refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(_leadingIcon(item.state)),
+        leading: IconButton(
+            onPressed: _onLeadingIconPressed,
+            icon: Icon(_leadingIcon(item.state))),
         title: Text(item.title),
       ),
     );
@@ -110,9 +134,9 @@ class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) => Consumer<TodoStore>(
       builder: (context, store, child) => ListView(
-            children: [
-              for (int i = 0; i < store.todos.length; i++)
-                TodoItem2(item: store.todos[i])
-            ],
-          ));
+              scrollDirection: Axis.vertical,
+              children: [
+                for (int i = 0; i < store.todos.length; i++)
+                  TodoItem2(item: store.todos[i])
+              ]));
 }
