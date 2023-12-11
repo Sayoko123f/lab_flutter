@@ -68,28 +68,10 @@ class _TodoTotalTextState extends State<TodoTotalText> {
   }
 }
 
-class TodoItem extends StatefulWidget {
-  const TodoItem({super.key});
-
-  @override
-  State<TodoItem> createState() => _TodoItemState();
-}
-
-class _TodoItemState extends State<TodoItem> {
-  @override
-  Widget build(BuildContext context) => Consumer<TodoStore>(
-      builder: (context, store, child) => const Card(
-            child: ListTile(
-              leading: Icon(Icons.check_box),
-              title: Text('123'),
-            ),
-          ));
-}
-
-class TodoItem2 extends StatelessWidget {
+class TodoItem extends StatelessWidget {
   final Todo item;
 
-  const TodoItem2({super.key, required this.item});
+  const TodoItem({super.key, required this.item});
 
   IconData _leadingIcon(String state) => switch (state) {
         'Pending' => Icons.check_box_outline_blank,
@@ -133,10 +115,9 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) => Consumer<TodoStore>(
-      builder: (context, store, child) => ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                for (int i = 0; i < store.todos.length; i++)
-                  TodoItem2(item: store.todos[i])
-              ]));
+      builder: (context, store, child) => ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: store.todos.length,
+            itemBuilder: (context, index) => TodoItem(item: store.todos[index]),
+          ));
 }
