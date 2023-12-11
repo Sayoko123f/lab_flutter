@@ -3,16 +3,16 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-Uri apiUri(String path, [Map<String, dynamic>? query]) {
+Uri _apiUri(String path, [Map<String, dynamic>? query]) {
   return Uri.http('192.168.12.41:3000', path, query);
 }
 
-Map<String, String> commonHeaders = {
+Map<String, String> _commonHeaders = {
   'Content-type': 'application/json',
   'Accept': 'application/json',
 };
 
-bool isOk(int statusCode) => 200 <= statusCode && statusCode < 300;
+bool _isOk(int statusCode) => 200 <= statusCode && statusCode < 300;
 
 class Todo {
   final String id;
@@ -57,6 +57,7 @@ class Todo {
 
 class FetchAllQuery {
   String? title;
+  // ['Pending', 'Progress', 'Resolved']
   String? state;
   DateTime? createStart;
   DateTime? createEnd;
@@ -98,8 +99,8 @@ class FetchAllQuery {
 }
 
 Future<Iterable<Todo>> fetchAll([FetchAllQuery? query]) async {
-  final res = await http.get(apiUri('todos', query?.toQuery()));
-  if (isOk(res.statusCode)) {
+  final res = await http.get(_apiUri('todos', query?.toQuery()));
+  if (_isOk(res.statusCode)) {
     var todos = jsonDecode(res.body) as List<dynamic>;
     return todos.map((e) => Todo.fromJson(e as Map<String, dynamic>));
   }
@@ -107,8 +108,8 @@ Future<Iterable<Todo>> fetchAll([FetchAllQuery? query]) async {
 }
 
 Future<Todo> fetchById(String id) async {
-  final res = await http.get(apiUri('todos/$id'));
-  if (isOk(res.statusCode)) {
+  final res = await http.get(_apiUri('todos/$id'));
+  if (_isOk(res.statusCode)) {
     var todo = jsonDecode(res.body);
     return Todo.fromJson(todo as Map<String, dynamic>);
   }
@@ -116,11 +117,11 @@ Future<Todo> fetchById(String id) async {
 }
 
 Future<Todo> create({required String title, required String content}) async {
-  final res = await http.post(apiUri('todos'),
-      headers: commonHeaders,
+  final res = await http.post(_apiUri('todos'),
+      headers: _commonHeaders,
       body: jsonEncode({'title': title, 'content': content}));
 
-  if (isOk(res.statusCode)) {
+  if (_isOk(res.statusCode)) {
     var todo = jsonDecode(res.body);
     return Todo.fromJson(todo as Map<String, dynamic>);
   }
@@ -128,8 +129,8 @@ Future<Todo> create({required String title, required String content}) async {
 }
 
 Future<void> delete(String id) async {
-  final res = await http.delete(apiUri('todos/$id'), headers: commonHeaders);
-  if (isOk(res.statusCode)) {
+  final res = await http.delete(_apiUri('todos/$id'), headers: _commonHeaders);
+  if (_isOk(res.statusCode)) {
     return;
   }
   throw HttpException('[Todo.delete] ${res.statusCode} ${res.body}');
@@ -138,9 +139,9 @@ Future<void> delete(String id) async {
 Future<Todo> update(String id, {String? title, String? content}) async {
   final body = {'title': title, 'content': content};
   body.removeWhere((key, value) => value == null);
-  final res = await http.patch(apiUri('todos/$id'),
-      headers: commonHeaders, body: jsonEncode(body));
-  if (isOk(res.statusCode)) {
+  final res = await http.patch(_apiUri('todos/$id'),
+      headers: _commonHeaders, body: jsonEncode(body));
+  if (_isOk(res.statusCode)) {
     var todo = jsonDecode(res.body);
     return Todo.fromJson(todo as Map<String, dynamic>);
   }
