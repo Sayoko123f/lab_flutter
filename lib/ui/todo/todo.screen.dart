@@ -8,8 +8,8 @@ import '../../api/todo.dart';
 
 final TodoStore todoStore = TodoStore();
 
-class TodoPage extends StatelessWidget {
-  const TodoPage({super.key});
+class TodoScreen extends StatelessWidget {
+  const TodoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +17,17 @@ class TodoPage extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<TodoStore>(create: (context) => todoStore),
         ],
-        child: Container(
-          color: Colors.lime,
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [TodoTotalText(), Expanded(child: TodoList())],
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('待辦事項清單'),
+            backgroundColor: Theme.of(context).primaryColorDark,
+          ),
+          body: Container(
+            color: Colors.lime,
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [TodoTotalText(), Expanded(child: TodoList())],
+            ),
           ),
         ));
   }
