@@ -38,7 +38,7 @@ class TodoStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  TodoSortValue _todoSortValue = TodoSortValue.none;
+  TodoSortValue _todoSortValue = TodoSortValue.createdAt;
   TodoSortValue get todoSortValue {
     return _todoSortValue;
   }

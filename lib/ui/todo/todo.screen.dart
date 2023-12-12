@@ -83,33 +83,14 @@ class TodoItem extends StatelessWidget {
 
   const TodoItem({super.key, required this.item});
 
-  IconData _leadingIcon(String state) => switch (state) {
-        'Pending' => Icons.check_box_outline_blank,
-        'Progress' => Icons.directions_run,
-        'Resolved' => Icons.done,
-        _ => Icons.error
-      };
-
-  Future<void> _onLeadingIconPressed() async {
-    debugPrint(item.id);
-    String newState = switch (item.state) {
-      'Pending' => 'Progress',
-      'Progress' => 'Resolved',
-      'Resolved' => 'Pending',
-      _ => 'Progress'
-    };
-    await update(item.id, state: newState);
-    await todoStore.refresh();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: IconButton(
-            onPressed: _onLeadingIconPressed,
-            icon: Icon(_leadingIcon(item.state))),
-        title: Text(item.title),
+        title: Text(
+          item.title,
+          textScaler: const TextScaler.linear(1.4),
+        ),
         subtitle: Text(
             '建立於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.createdAt)}\n修改於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)}',
             maxLines: 2),
