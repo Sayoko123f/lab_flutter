@@ -1,12 +1,8 @@
-import 'dart:collection';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/todo.dart';
-
-final TodoStore todoStore = TodoStore();
+import 'todo.api.dart';
+import 'todo.store.dart';
 
 class TodoScreen extends StatelessWidget {
   const TodoScreen({super.key});
@@ -26,36 +22,20 @@ class TodoScreen extends StatelessWidget {
             color: Colors.lime,
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [TodoTotalText(), Expanded(child: TodoList())],
+              children: [
+                Row(children: [
+                  DropdownMenu(
+                    label: Icon(Icons.filter_list),
+                    dropdownMenuEntries: [],
+                  )
+                ]),
+                TodoTotalText(),
+                Expanded(child: TodoList())
+              ],
             ),
           ),
         ));
   }
-}
-
-class TodoStore extends ChangeNotifier {
-  List<Todo> _todos = [];
-
-  TodoStore() {
-    refresh();
-  }
-
-  Future<void> refresh() async {
-    try {
-      debugPrint('refresh.');
-      var res = await fetchAll();
-      _todos = res.toList();
-    } on HttpException {
-      debugPrint('[Todo.refresh]: HttpException');
-    } catch (error) {
-      debugPrint(error.toString());
-      debugPrint('any error.');
-    } finally {
-      notifyListeners();
-    }
-  }
-
-  UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
 }
 
 class TodoTotalText extends StatefulWidget {
