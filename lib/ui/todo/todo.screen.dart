@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'todo.api.dart';
 import 'todo.store.dart';
@@ -109,7 +110,7 @@ class TodoItem extends StatelessWidget {
             icon: Icon(_leadingIcon(item.state))),
         title: Text(item.title),
         subtitle: Text(
-            '建立於 ${item.createdAt.toIso8601String()}\n修改於 ${item.updatedAt.toIso8601String()}',
+            '建立於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.createdAt)}\n修改於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)}',
             maxLines: 2),
         isThreeLine: true,
       ),

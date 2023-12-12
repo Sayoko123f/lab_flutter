@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import 'router/router.dart';
 
 void main() {
+  Intl.defaultLocale = 'zh-TW';
+  initializeDateFormatting();
   runApp(const MyApp());
 }
 
