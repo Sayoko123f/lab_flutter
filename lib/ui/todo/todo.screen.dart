@@ -39,7 +39,7 @@ class TodoScreen extends StatelessWidget {
                     initialSelection: TodoSortValue.createdAt,
                     inputDecorationTheme: const InputDecorationTheme(
                         disabledBorder: InputBorder.none),
-                    leadingIcon: const Icon(Icons.filter_list),
+                    leadingIcon: const Icon(Icons.sort),
                     label: const Text('排序'),
                     dropdownMenuEntries: TodoSortValue.values
                         .map((e) => DropdownMenuEntry(
