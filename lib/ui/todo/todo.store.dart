@@ -60,9 +60,6 @@ class TodoStore extends ChangeNotifier {
 
   UnmodifiableListView<Todo> get todos => UnmodifiableListView(_todos);
 
-  UnmodifiableListView<Todo> get filtered => UnmodifiableListView(
-      _todos.where((e) => filterState == null ? true : e.state == filterState));
-
   UnmodifiableListView<Todo> get todoShouldShow {
     var list = _todos
         .where((e) => filterState == null ? true : e.state == filterState)
@@ -98,4 +95,19 @@ final Map<String, TodoState> todoStateMap = {
 
 enum TodoSortValue { none, createdAt, updatedAt }
 
+final todoSortValueZh = {
+  TodoSortValue.none: '預設',
+  TodoSortValue.createdAt: '依建立時間',
+  TodoSortValue.updatedAt: '依修改時間'
+};
+
 enum SortBy { asc, desc }
+
+List<DropdownMenuEntry<String?>> todoFilterDropdownMenuEntries() {
+  var list = todoStateMap.values
+      .map((e) => DropdownMenuEntry<String?>(
+          value: e.value, label: e.label, leadingIcon: Icon(e.icon)))
+      .toList();
+  list.insert(0, const DropdownMenuEntry(value: null, label: '全部'));
+  return list;
+}

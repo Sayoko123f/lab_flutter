@@ -29,14 +29,25 @@ class TodoScreen extends StatelessWidget {
                         disabledBorder: InputBorder.none),
                     leadingIcon: const Icon(Icons.filter_list),
                     label: const Text('篩選'),
-                    dropdownMenuEntries: todoStateMap.values
+                    dropdownMenuEntries: todoFilterDropdownMenuEntries(),
+                    onSelected: (value) {
+                      todoStore.filterState = '';
+                    },
+                  ),
+                  DropdownMenu(
+                    initialSelection: TodoSortValue.none,
+                    inputDecorationTheme: const InputDecorationTheme(
+                        disabledBorder: InputBorder.none),
+                    leadingIcon: const Icon(Icons.filter_list),
+                    label: const Text('排序'),
+                    dropdownMenuEntries: TodoSortValue.values
                         .map((e) => DropdownMenuEntry(
-                            value: e.value,
-                            label: e.label,
-                            leadingIcon: Icon(e.icon)))
+                              value: e,
+                              label: todoSortValueZh[e]!,
+                            ))
                         .toList(),
                     onSelected: (value) {
-                      todoStore.filterState = value;
+                      todoStore.todoSortValue = value ?? TodoSortValue.none;
                     },
                   )
                 ]),
@@ -97,6 +108,10 @@ class TodoItem extends StatelessWidget {
             onPressed: _onLeadingIconPressed,
             icon: Icon(_leadingIcon(item.state))),
         title: Text(item.title),
+        subtitle: Text(
+            '建立於 ${item.createdAt.toIso8601String()}\n修改於 ${item.updatedAt.toIso8601String()}',
+            maxLines: 2),
+        isThreeLine: true,
       ),
     );
   }
@@ -114,8 +129,8 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) => Consumer<TodoStore>(
       builder: (context, store, child) => ListView.builder(
             scrollDirection: Axis.vertical,
-            itemCount: store.filtered.length,
+            itemCount: store.todoShouldShow.length,
             itemBuilder: (context, index) =>
-                TodoItem(item: store.filtered[index]),
+                TodoItem(item: store.todoShouldShow[index]),
           ));
 }
