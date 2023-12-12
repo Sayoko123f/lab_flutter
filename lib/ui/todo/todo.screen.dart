@@ -20,17 +20,28 @@ class TodoScreen extends StatelessWidget {
           ),
           body: Container(
             color: Colors.lime,
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
                   DropdownMenu(
-                    label: Icon(Icons.filter_list),
-                    dropdownMenuEntries: [],
+                    inputDecorationTheme: const InputDecorationTheme(
+                        disabledBorder: InputBorder.none),
+                    leadingIcon: const Icon(Icons.filter_list),
+                    label: const Text('篩選'),
+                    dropdownMenuEntries: todoStateMap.values
+                        .map((e) => DropdownMenuEntry(
+                            value: e.value,
+                            label: e.label,
+                            leadingIcon: Icon(e.icon)))
+                        .toList(),
+                    onSelected: (value) {
+                      todoStore.filterState = value;
+                    },
                   )
                 ]),
-                TodoTotalText(),
-                Expanded(child: TodoList())
+                const TodoTotalText(),
+                const Expanded(child: TodoList())
               ],
             ),
           ),
@@ -103,7 +114,8 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) => Consumer<TodoStore>(
       builder: (context, store, child) => ListView.builder(
             scrollDirection: Axis.vertical,
-            itemCount: store.todos.length,
-            itemBuilder: (context, index) => TodoItem(item: store.todos[index]),
+            itemCount: store.filtered.length,
+            itemBuilder: (context, index) =>
+                TodoItem(item: store.filtered[index]),
           ));
 }
