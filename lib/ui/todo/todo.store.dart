@@ -64,12 +64,11 @@ class TodoStore extends ChangeNotifier {
     var list = _todos
         .where((e) => filterState == null ? true : e.state == filterState)
         .toList();
-    if (todoSortValue == TodoSortValue.none) {
-      return UnmodifiableListView(list);
-    }
+
     list.sort((aa, bb) {
       var a = sortBy == SortBy.asc ? aa : bb;
       var b = sortBy == SortBy.asc ? bb : aa;
+
       return switch (todoSortValue) {
         TodoSortValue.createdAt => a.createdAt.compareTo(b.createdAt),
         TodoSortValue.updatedAt => a.updatedAt.compareTo(b.updatedAt),
@@ -96,9 +95,9 @@ final Map<String, TodoState> todoStateMap = {
 enum TodoSortValue { none, createdAt, updatedAt }
 
 final todoSortValueZh = {
-  TodoSortValue.none: '預設',
   TodoSortValue.createdAt: '依建立時間',
-  TodoSortValue.updatedAt: '依修改時間'
+  TodoSortValue.updatedAt: '依修改時間',
+  TodoSortValue.none: '不排序',
 };
 
 enum SortBy { asc, desc }

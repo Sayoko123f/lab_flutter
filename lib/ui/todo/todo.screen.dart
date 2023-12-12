@@ -32,11 +32,11 @@ class TodoScreen extends StatelessWidget {
                     label: const Text('篩選'),
                     dropdownMenuEntries: todoFilterDropdownMenuEntries(),
                     onSelected: (value) {
-                      todoStore.filterState = '';
+                      todoStore.filterState = value;
                     },
                   ),
                   DropdownMenu(
-                    initialSelection: TodoSortValue.none,
+                    initialSelection: TodoSortValue.createdAt,
                     inputDecorationTheme: const InputDecorationTheme(
                         disabledBorder: InputBorder.none),
                     leadingIcon: const Icon(Icons.filter_list),
@@ -50,9 +50,10 @@ class TodoScreen extends StatelessWidget {
                     onSelected: (value) {
                       todoStore.todoSortValue = value ?? TodoSortValue.none;
                     },
-                  )
+                  ),
                 ]),
                 const TodoTotalText(),
+                const ToggleSortByButton(),
                 const Expanded(child: TodoList())
               ],
             ),
@@ -133,5 +134,27 @@ class _TodoListState extends State<TodoList> {
             itemCount: store.todoShouldShow.length,
             itemBuilder: (context, index) =>
                 TodoItem(item: store.todoShouldShow[index]),
+          ));
+}
+
+class ToggleSortByButton extends StatefulWidget {
+  const ToggleSortByButton({super.key});
+
+  @override
+  State<ToggleSortByButton> createState() => _ToggleSortByButtonState();
+}
+
+class _ToggleSortByButtonState extends State<ToggleSortByButton> {
+  @override
+  Widget build(BuildContext context) => Consumer<TodoStore>(
+      builder: (context, store, child) => TextButton.icon(
+            label: Text(store.sortBy == SortBy.asc ? '升序' : '降序'),
+            icon: Icon(store.sortBy == SortBy.asc
+                ? Icons.arrow_upward
+                : Icons.arrow_downward),
+            onPressed: () {
+              store.sortBy =
+                  store.sortBy == SortBy.asc ? SortBy.desc : SortBy.asc;
+            },
           ));
 }
