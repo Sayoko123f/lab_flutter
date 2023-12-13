@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
 import '../mods/todo/todo.screen.dart' show TodoScreen;
 import '../mods/todo/todo.store.dart' show todoStore;
@@ -14,11 +15,14 @@ final router = GoRouter(
     GoRoute(
         path: '/todo/:id',
         redirect: (context, state) {
-          var len = todoStore.todos
-              .where((element) => element.id == state.pathParameters['id'])
-              .length;
-          var ok = len > 0;
-          return ok ? null : '/';
+          var todos = todoStore.todos
+              .where((element) => element.id == state.pathParameters['id']);
+          try {
+            todoStore.selectedTodo = todos.single;
+          } on StateError {
+            return '/';
+          }
+          return null;
         },
         builder: (context, state) => DetailScreen(
               goRouterState: state,

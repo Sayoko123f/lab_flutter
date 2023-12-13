@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'router/router.dart';
-import 'mods/todo/todo.store.dart' show TodoStore;
+import 'mods/todo/todo.store.dart' show TodoStore, todoStore;
 
 void main() {
   Intl.defaultLocale = 'zh-TW';
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<TodoStore>(create: (context) => TodoStore())
+        ChangeNotifierProvider<TodoStore>(create: (context) => todoStore)
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

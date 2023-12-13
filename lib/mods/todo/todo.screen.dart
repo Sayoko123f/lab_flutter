@@ -93,7 +93,6 @@ class TodoItem extends StatelessWidget {
             maxLines: 2),
         isThreeLine: true,
         onTap: () {
-          debugPrint('twet');
           context.go('/todo/${item.id}');
         },
       ),

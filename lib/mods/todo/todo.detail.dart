@@ -18,13 +18,9 @@ class DetailScreen extends StatelessWidget {
           label: const Text('返回'),
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            debugPrint('1');
             if (context.canPop()) {
-              debugPrint('2');
               return context.pop();
             }
-            debugPrint('3');
-            debugPrint(todoStore.todos.length.toString());
             return context.go('/');
           },
         ),
@@ -35,7 +31,7 @@ class DetailScreen extends StatelessWidget {
         child: Column(children: [
           Consumer<TodoStore>(
               builder: (context, store, child) =>
-                  Text(goRouterState?.pathParameters['id'] ?? '找不到 id'))
+                  Text(todoStore.selectedTodo!.id))
         ]),
       ),
     );

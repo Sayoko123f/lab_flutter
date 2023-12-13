@@ -9,6 +9,7 @@ final todoStore = TodoStore();
 
 class TodoStore extends ChangeNotifier {
   Iterable<Todo> _todos = [];
+  Todo? selectedTodo;
 
   TodoStore() {
     refresh();
@@ -18,11 +19,10 @@ class TodoStore extends ChangeNotifier {
     try {
       debugPrint('refresh.');
       _todos = await fetchAll();
-    } on HttpException {
-      debugPrint('[Todo.refresh]: HttpException');
+    } on HttpException catch (e) {
+      debugPrint('[Todo.refresh]: HttpException ${e.uri} ${e.message}');
     } catch (error) {
       debugPrint(error.toString());
-      debugPrint('any error.');
     } finally {
       notifyListeners();
     }
