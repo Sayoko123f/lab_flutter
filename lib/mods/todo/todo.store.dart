@@ -79,18 +79,22 @@ class TodoStore extends ChangeNotifier {
   }
 }
 
-class TodoState {
-  final String label;
-  final String value;
-  final IconData icon;
-  TodoState(this.value, this.label, {required this.icon});
-}
+enum TodoState { pending, progress, resolved }
 
-final Map<String, TodoState> todoStateMap = {
-  'Pending': TodoState('Pending', '待處理', icon: Icons.pending),
-  'Progress': TodoState('Progress', '進行中', icon: Icons.directions_run),
-  'Resolved': TodoState('Resolved', '已完成', icon: Icons.done),
-};
+typedef TodoStateMeta = ({String value, String label, IconData icon});
+
+extension on TodoState {
+  TodoStateMeta get meta {
+    switch (this) {
+      case TodoState.pending:
+        return (value: 'Pending', label: '待處理', icon: Icons.pending);
+      case TodoState.progress:
+        return (value: 'Progress', label: '進行中', icon: Icons.directions_run);
+      case TodoState.resolved:
+        return (value: 'Resolved', label: '已完成', icon: Icons.done);
+    }
+  }
+}
 
 enum TodoSortValue { none, createdAt, updatedAt }
 
@@ -103,9 +107,11 @@ final todoSortValueZh = {
 enum SortBy { asc, desc }
 
 List<DropdownMenuEntry<String?>> todoFilterDropdownMenuEntries() {
-  var list = todoStateMap.values
+  var list = TodoState.values
       .map((e) => DropdownMenuEntry<String?>(
-          value: e.value, label: e.label, leadingIcon: Icon(e.icon)))
+          value: e.meta.value,
+          label: e.meta.label,
+          leadingIcon: Icon(e.meta.icon)))
       .toList();
   list.insert(0, const DropdownMenuEntry(value: null, label: '全部'));
   return list;
