@@ -146,5 +146,5 @@ Future<Todo> update(String id,
     var todo = jsonDecode(res.body);
     return Todo.fromJson(todo as Map<String, dynamic>);
   }
-  throw HttpException('[Todo.create] ${res.statusCode} ${res.body}');
+  throw HttpException('[Todo.update] ${res.statusCode} ${res.body}');
 }

@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -10,55 +11,51 @@ class TodoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<TodoStore>(create: (context) => todoStore),
-        ],
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('待辦事項清單'),
-            backgroundColor: Theme.of(context).primaryColorDark,
-          ),
-          body: Container(
-            color: Colors.lime,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  DropdownMenu(
-                    inputDecorationTheme: const InputDecorationTheme(
-                        disabledBorder: InputBorder.none),
-                    leadingIcon: const Icon(Icons.filter_list),
-                    label: const Text('篩選'),
-                    dropdownMenuEntries: todoFilterDropdownMenuEntries(),
-                    onSelected: (value) {
-                      todoStore.filterState = value;
-                    },
-                  ),
-                  DropdownMenu(
-                    initialSelection: TodoSortValue.createdAt,
-                    inputDecorationTheme: const InputDecorationTheme(
-                        disabledBorder: InputBorder.none),
-                    leadingIcon: const Icon(Icons.sort),
-                    label: const Text('排序'),
-                    dropdownMenuEntries: TodoSortValue.values
-                        .map((e) => DropdownMenuEntry(
-                              value: e,
-                              label: todoSortValueZh[e]!,
-                            ))
-                        .toList(),
-                    onSelected: (value) {
-                      todoStore.todoSortValue = value ?? TodoSortValue.none;
-                    },
-                  ),
-                ]),
-                const TodoTotalText(),
-                const ToggleSortByButton(),
-                const Expanded(child: TodoList())
-              ],
-            ),
-          ),
-        ));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('待辦事項清單'),
+        backgroundColor: Theme.of(context).primaryColorDark,
+      ),
+      body: Container(
+        color: Colors.lime,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              DropdownMenu(
+                inputDecorationTheme: const InputDecorationTheme(
+                    disabledBorder: InputBorder.none),
+                leadingIcon: const Icon(Icons.filter_list),
+                label: const Text('篩選'),
+                dropdownMenuEntries: todoFilterDropdownMenuEntries(),
+                onSelected: (value) {
+                  todoStore.filterState = value;
+                },
+              ),
+              DropdownMenu(
+                initialSelection: TodoSortValue.createdAt,
+                inputDecorationTheme: const InputDecorationTheme(
+                    disabledBorder: InputBorder.none),
+                leadingIcon: const Icon(Icons.sort),
+                label: const Text('排序'),
+                dropdownMenuEntries: TodoSortValue.values
+                    .map((e) => DropdownMenuEntry(
+                          value: e,
+                          label: todoSortValueZh[e]!,
+                        ))
+                    .toList(),
+                onSelected: (value) {
+                  todoStore.todoSortValue = value ?? TodoSortValue.none;
+                },
+              ),
+            ]),
+            const TodoTotalText(),
+            const ToggleSortByButton(),
+            const Expanded(child: TodoList())
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -95,6 +92,10 @@ class TodoItem extends StatelessWidget {
             '建立於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.createdAt)}\n修改於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)}',
             maxLines: 2),
         isThreeLine: true,
+        onTap: () {
+          debugPrint('twet');
+          context.go('/todo/${item.id}');
+        },
       ),
     );
   }
