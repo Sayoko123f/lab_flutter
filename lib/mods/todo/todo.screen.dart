@@ -14,10 +14,10 @@ class TodoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('待辦事項清單'),
-        backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       ),
       body: Container(
-        color: Colors.lime,
+        color: Theme.of(context).canvasColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -90,7 +90,8 @@ class TodoItem extends StatelessWidget {
         ),
         subtitle: Text(
             '建立於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.createdAt)}\n修改於 ${DateFormat('yyyy-MM-dd HH:mm:ss').format(item.updatedAt)}',
-            maxLines: 2),
+            maxLines: 2,
+            style: TextStyle(color: Theme.of(context).hintColor)),
         isThreeLine: true,
         onTap: () {
           context.go('/todo/${item.id}');

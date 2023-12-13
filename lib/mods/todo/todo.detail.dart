@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import 'todo.api.dart';
-import 'todo.store.dart';
+import 'todo.store.dart' show TodoStore;
 
 class DetailScreen extends StatelessWidget {
   final GoRouterState? goRouterState;
@@ -24,16 +24,51 @@ class DetailScreen extends StatelessWidget {
             return context.go('/');
           },
         ),
-        backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       ),
-      body: Container(
-        color: Colors.pinkAccent,
-        child: Column(children: [
-          Consumer<TodoStore>(
-              builder: (context, store, child) =>
-                  Text(todoStore.selectedTodo!.id))
-        ]),
-      ),
+      body: Consumer<TodoStore>(
+          builder: (context, store, child) => Column(children: [
+                Row(children: [
+                  Expanded(
+                      child: Text(store.selectedTodo!.title,
+                          textAlign: TextAlign.right)),
+                  const Column(
+                    children: [Icon(Icons.abc)],
+                  )
+                ]),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(store.selectedTodo!.content,
+                          textAlign: TextAlign.right),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text.rich(TextSpan(children: [
+                        const TextSpan(text: '建立時間'),
+                        TextSpan(
+                            text: DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(store.selectedTodo!.createdAt)),
+                      ])),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text.rich(TextSpan(children: [
+                        const TextSpan(text: '修改時間'),
+                        TextSpan(
+                            text: DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(store.selectedTodo!.updatedAt)),
+                      ])),
+                    ),
+                  ],
+                ),
+              ])),
     );
   }
 }
