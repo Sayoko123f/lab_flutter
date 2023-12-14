@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import 'todo.api.dart';
 import 'todo.store.dart' show TodoStore;
 
-class DetailScreen extends StatelessWidget {
-  final GoRouterState? goRouterState;
-  const DetailScreen({super.key, this.goRouterState});
+class TodoDetailScreen extends StatefulWidget {
+  const TodoDetailScreen({super.key});
 
+  @override
+  State<TodoDetailScreen> createState() => _TodoDetailScreenState();
+}
+
+class _TodoDetailScreenState extends State<TodoDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +35,17 @@ class DetailScreen extends StatelessWidget {
                   Expanded(
                       child: Text(store.selectedTodo!.title,
                           textAlign: TextAlign.right)),
-                  const Column(
-                    children: [Icon(Icons.abc)],
+                  Column(
+                    children: [
+                      TextButton.icon(
+                        label: const Text('編輯'),
+                        onPressed: () {
+                          context.pushNamed('todo.edit',
+                              pathParameters: {'id': store.selectedTodo!.id});
+                        },
+                        icon: const Icon(Icons.edit),
+                      )
+                    ],
                   )
                 ]),
                 Row(

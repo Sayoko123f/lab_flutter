@@ -8,7 +8,7 @@ import 'todo.api.dart';
 final todoStore = TodoStore();
 
 class TodoStore extends ChangeNotifier {
-  Iterable<Todo> _todos = [];
+  List<Todo> _todos = [];
   Todo? selectedTodo;
 
   TodoStore() {
@@ -18,7 +18,7 @@ class TodoStore extends ChangeNotifier {
   Future<void> refresh() async {
     try {
       debugPrint('refresh.');
-      _todos = await fetchAll();
+      _todos = (await fetchAll()).toList();
     } on HttpException catch (e) {
       debugPrint('[Todo.refresh]: HttpException ${e.uri} ${e.message}');
     } catch (error) {
@@ -55,6 +55,12 @@ class TodoStore extends ChangeNotifier {
 
   set sortBy(SortBy val) {
     _sortBy = val;
+    notifyListeners();
+  }
+
+  void updateTodo(String id, Todo newTodo) {
+    _todos[_todos.indexWhere((e) => e.id == id)] = newTodo;
+    debugPrint(_todos[_todos.indexWhere((e) => e.id == id)].title);
     notifyListeners();
   }
 
