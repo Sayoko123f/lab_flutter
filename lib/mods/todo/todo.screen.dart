@@ -79,7 +79,6 @@ class TodoItem extends StatelessWidget {
   final Todo item;
 
   const TodoItem({super.key, required this.item});
-
   @override
   Widget build(BuildContext context) {
     return Card(
