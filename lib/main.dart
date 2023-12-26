@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
         child: Builder(builder: (context) {
           return BlocProvider(
             create: (context) => TodoOverviewBloc(
-                todosRepository: context.read<TodosRepository>()),
+                todosRepository: context.read<TodosRepository>())
+              ..add(TodoRefresh()),
             child: MaterialApp.router(
               title: 'Flutter Demo',
               theme: ThemeData(

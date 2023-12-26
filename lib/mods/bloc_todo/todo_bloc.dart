@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 
 import './todo_event.dart';
@@ -24,6 +25,7 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
       var todos = await _todosRepository.refresh();
       emit(state.copyWith(status: TodosOverviewStatus.success, todos: todos));
     } on HttpException {
+      debugPrint('TodosOverviewStatus.failure');
       emit(state.copyWith(status: TodosOverviewStatus.failure));
     }
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,12 @@ class TodosRepository {
     } on HttpException catch (e) {
       debugPrint(
           '[TodosRepository.refresh]: HttpException ${e.uri} ${e.message}');
+      rethrow;
+    } on TimeoutException catch (e) {
+      debugPrint('[TodosRepository.refresh]: TimeoutException ${e.message}');
+      rethrow;
+    } catch (e) {
+      debugPrint('[TodosRepository.refresh]: ${e.runtimeType} ${e.toString()}');
       rethrow;
     }
   }

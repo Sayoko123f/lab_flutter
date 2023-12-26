@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Uri _apiUri(String path, [Map<String, dynamic>? query]) {
@@ -99,8 +100,11 @@ class FetchAllQuery {
 }
 
 Future<Iterable<Todo>> fetchAll([FetchAllQuery? query]) async {
-  final res = await http.get(_apiUri('todos', query?.toQuery()));
+  final res = await http
+      .get(_apiUri('todos', query?.toQuery()))
+      .timeout(Durations.long2);
   if (_isOk(res.statusCode)) {
+    await Future.delayed(Durations.extralong2);
     var todos = jsonDecode(res.body) as List<dynamic>;
     return todos.map((e) => Todo.fromJson(e as Map<String, dynamic>));
   }
