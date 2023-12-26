@@ -33,10 +33,10 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
 
   void _onSelect(TodoSelected event, Emitter emit) {
     if (event.todo == state.selectedTodo) {
-      emit(state.copyWith(selectedTodo: null));
+      emit(state.copyWith(selectedTodo: null, shouldRebuildList: false));
       debugPrint('123123');
       return;
     }
-    emit(state.copyWith(selectedTodo: event.todo));
+    emit(state.copyWith(selectedTodo: event.todo, shouldRebuildList: false));
   }
 }

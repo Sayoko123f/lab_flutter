@@ -25,7 +25,9 @@ class TodoHomePage extends StatelessWidget {
           children: [
             const SelectedTodoText(),
             BlocBuilder<TodoOverviewBloc, TodosOverviewState>(
-                builder: (context, state) {
+                buildWhen: (prev, next) {
+              return next.shouldRebuildList;
+            }, builder: (context, state) {
               return Expanded(child: TodoList(state.todos));
             })
           ],

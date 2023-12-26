@@ -8,22 +8,28 @@ final class TodosOverviewState {
   final TodosOverviewStatus status;
   final List<Todo> todos;
   final Todo? selectedTodo;
+  final bool shouldRebuildList;
 
   const TodosOverviewState(
       {this.status = TodosOverviewStatus.initial,
       this.todos = const [],
-      this.selectedTodo});
+      this.selectedTodo,
+      this.shouldRebuildList = true});
 
   Iterable<Todo> get shouldShowTodos {
     return todos;
   }
 
   TodosOverviewState copyWith(
-      {TodosOverviewStatus? status, List<Todo>? todos, Todo? selectedTodo}) {
+      {TodosOverviewStatus? status,
+      List<Todo>? todos,
+      Todo? selectedTodo,
+      bool? shouldRebuildList}) {
     return TodosOverviewState(
         status: status ?? this.status,
         todos: todos ?? this.todos,
-        selectedTodo: selectedTodo);
+        selectedTodo: selectedTodo,
+        shouldRebuildList: shouldRebuildList ?? true);
   }
 
   @override
