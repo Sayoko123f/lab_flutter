@@ -65,6 +65,7 @@ class TodoItem extends StatelessWidget {
             maxLines: 2,
             style: TextStyle(color: Theme.of(context).hintColor)),
         isThreeLine: true,
+        trailing: Text(item.state.label),
         onTap: () {
           debugPrint(item.id);
         },
