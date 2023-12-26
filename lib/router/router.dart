@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-import '../mods/bloc_todo/tood_homepage.dart' show TodoHomePage;
+import '../mods/bloc_todo/ui/homepage.dart' show TodoHomePage;
 
 // GoRouter configuration
 final router = GoRouter(

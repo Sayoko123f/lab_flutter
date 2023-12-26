@@ -16,6 +16,7 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
       : _todosRepository = todosRepository,
         super(const TodosOverviewState()) {
     on<TodoRefresh>(_onRefresh);
+    on<TodoSelected>(_onSelect);
   }
 
   Future<void> _onRefresh(TodoRefresh event, Emitter emit) async {
@@ -28,5 +29,14 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
       debugPrint('TodosOverviewStatus.failure');
       emit(state.copyWith(status: TodosOverviewStatus.failure));
     }
+  }
+
+  void _onSelect(TodoSelected event, Emitter emit) {
+    if (event.todo == state.selectedTodo) {
+      emit(state.copyWith(selectedTodo: null));
+      debugPrint('123123');
+      return;
+    }
+    emit(state.copyWith(selectedTodo: event.todo));
   }
 }

@@ -54,6 +54,14 @@ class Todo {
           ),
         _ => throw const FormatException('Failed convert todo from JSON.')
       };
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Todo && other.id == id;
+  }
 }
 
 class FetchAllQuery {

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import 'todo_state.dart';
-import 'todo_bloc.dart';
-import 'todo_repository.dart';
-import '../todo/todo.api.dart' show Todo;
+import '../todo_state.dart';
+import '../todo_bloc.dart';
+import '../todo_event.dart';
+import '../todo_repository.dart';
+import '../../todo/todo.api.dart' show Todo;
 
 class TodoHomePage extends StatelessWidget {
   const TodoHomePage({super.key});
@@ -22,6 +23,7 @@ class TodoHomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SelectedTodoText(),
             BlocBuilder<TodoOverviewBloc, TodosOverviewState>(
                 builder: (context, state) {
               return Expanded(child: TodoList(state.todos));
@@ -40,6 +42,7 @@ class TodoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('TodoList build.');
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: list.length,
@@ -54,6 +57,7 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('TodoItem build.');
     return Card(
       child: ListTile(
         title: Text(
@@ -67,9 +71,26 @@ class TodoItem extends StatelessWidget {
         isThreeLine: true,
         trailing: Text(item.state.label),
         onTap: () {
-          debugPrint(item.id);
+          debugPrint('正在點擊 ${item.id}');
+          var bloc = context.read<TodoOverviewBloc>();
+          context.read<TodoOverviewBloc>().add(TodoSelected(item));
         },
       ),
     );
+  }
+}
+
+class SelectedTodoText extends StatelessWidget {
+  const SelectedTodoText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TodoOverviewBloc, TodosOverviewState>(
+        builder: (context, state) {
+      var text = state.selectedTodo == null
+          ? '現在沒有選擇 Todo'
+          : '現在正選擇 ${state.selectedTodo?.id}';
+      return Text(text);
+    });
   }
 }
