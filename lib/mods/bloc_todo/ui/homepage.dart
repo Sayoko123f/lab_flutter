@@ -24,9 +24,9 @@ class TodoHomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(vertical: 8),
               child: Row(
-                children: [TodoFilterDropdownMenu()],
+                children: [TodoFilterDropdownMenu(), TodoSortAscDropdownMenu()],
               ),
             ),
             const SelectedTodoText(),
@@ -183,5 +183,39 @@ class TodoFilterDropdownMenu extends StatelessWidget {
               },
               dropdownMenuEntries: filterMenu);
         });
+  }
+}
+
+class TodoSortAscDropdownMenu extends StatelessWidget {
+  const TodoSortAscDropdownMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<TodoOverviewBloc, TodosOverviewState, bool>(
+      selector: (state) => state.asc,
+      builder: (context, asc) {
+        return DropdownMenu(
+            label: const Text('排序'),
+            leadingIcon: const Icon(Icons.sort),
+            initialSelection: asc,
+            inputDecorationTheme:
+                const InputDecorationTheme(disabledBorder: InputBorder.none),
+            onSelected: (value) {
+              if (value != null) {
+                context.read<TodoOverviewBloc>().add(TodoSortAscChange(value));
+              }
+            },
+            dropdownMenuEntries: const [
+              DropdownMenuEntry(
+                  value: true,
+                  label: '升序',
+                  leadingIcon: Icon(Icons.arrow_upward)),
+              DropdownMenuEntry(
+                  value: false,
+                  label: '降序',
+                  leadingIcon: Icon(Icons.arrow_downward)),
+            ]);
+      },
+    );
   }
 }

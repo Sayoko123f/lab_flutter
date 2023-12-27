@@ -19,6 +19,7 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
     on<TodoSelected>(_onSelect);
     on<TodoDeleted>(_onDelete);
     on<TodoFilterChange>(_onFilterChange);
+    on<TodoSortAscChange>(_onSortAscChange);
   }
 
   Future<void> _onRefresh(TodoRefresh event, Emitter emit) async {
@@ -55,5 +56,9 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
   void _onFilterChange(TodoFilterChange event, Emitter emit) {
     debugPrint(event.value);
     emit(state.copyWith(filterOption: event.value));
+  }
+
+  void _onSortAscChange(TodoSortAscChange event, Emitter emit) {
+    emit(state.copyWith(asc: event.asc));
   }
 }

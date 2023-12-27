@@ -20,3 +20,8 @@ final class TodoFilterChange extends TodoEvent {
   final String value;
   const TodoFilterChange(this.value);
 }
+
+final class TodoSortAscChange extends TodoEvent {
+  final bool asc;
+  const TodoSortAscChange(this.asc);
+}
