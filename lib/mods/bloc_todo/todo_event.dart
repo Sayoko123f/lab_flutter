@@ -6,7 +6,10 @@ sealed class TodoEvent {
   const TodoEvent();
 }
 
-final class TodoDeleted extends TodoEvent {}
+final class TodoDeleted extends TodoEvent {
+  final String id;
+  const TodoDeleted(this.id);
+}
 
 final class TodoCreated extends TodoEvent {}
 

@@ -24,11 +24,21 @@ class TodoHomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SelectedTodoText(),
+            const SelectedTodoActions(),
             BlocBuilder<TodoOverviewBloc, TodosOverviewState>(
                 buildWhen: (prev, next) {
               return next.shouldRebuildList;
             }, builder: (context, state) {
-              return Expanded(child: TodoList(state.todos));
+              final isLoading = state.status == TodosOverviewStatus.loading;
+              return Expanded(
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            value: null,
+                            semanticsLabel: '讀取中',
+                          ),
+                        )
+                      : TodoList(state.todos));
             })
           ],
         ),
@@ -74,7 +84,6 @@ class TodoItem extends StatelessWidget {
         trailing: Text(item.state.label),
         onTap: () {
           debugPrint('正在點擊 ${item.id}');
-          var bloc = context.read<TodoOverviewBloc>();
           context.read<TodoOverviewBloc>().add(TodoSelected(item));
         },
       ),
@@ -93,6 +102,44 @@ class SelectedTodoText extends StatelessWidget {
           ? '現在沒有選擇 Todo'
           : '現在正選擇 ${state.selectedTodo?.id}';
       return Text(text);
+    });
+  }
+}
+
+class SelectedTodoActions extends StatelessWidget {
+  const SelectedTodoActions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<TodoOverviewBloc, TodosOverviewState, Todo?>(
+        selector: (state) {
+      return state.selectedTodo;
+    }, builder: (context, state) {
+      return Row(
+        children: [
+          TextButton.icon(
+              onPressed: state == null
+                  ? null
+                  : () {
+                      debugPrint('編輯 ${state.id}');
+                    },
+              icon: const Icon(
+                Icons.edit,
+              ),
+              label: const Text('編輯')),
+          TextButton.icon(
+              onPressed: state == null
+                  ? null
+                  : () {
+                      debugPrint('刪除 ${state.id}');
+                      context
+                          .read<TodoOverviewBloc>()
+                          .add(TodoDeleted(state.id));
+                    },
+              icon: const Icon(Icons.delete),
+              label: const Text('刪除')),
+        ],
+      );
     });
   }
 }
