@@ -1,5 +1,3 @@
-import 'package:bloc/bloc.dart';
-
 import '../todo/todo.api.dart' show Todo;
 
 sealed class TodoEvent {
@@ -11,11 +9,14 @@ final class TodoDeleted extends TodoEvent {
   const TodoDeleted(this.id);
 }
 
-final class TodoCreated extends TodoEvent {}
-
 final class TodoRefresh extends TodoEvent {}
 
 final class TodoSelected extends TodoEvent {
   final Todo todo;
   const TodoSelected(this.todo);
+}
+
+final class TodoFilterChange extends TodoEvent {
+  final String value;
+  const TodoFilterChange(this.value);
 }

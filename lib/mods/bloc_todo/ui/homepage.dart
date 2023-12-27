@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import '../todo_state.dart';
 import '../todo_bloc.dart';
 import '../todo_event.dart';
-import '../todo_repository.dart';
 import '../../todo/todo.api.dart' show Todo;
 
 class TodoHomePage extends StatelessWidget {
@@ -24,6 +23,12 @@ class TodoHomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [TodoFilterDropdownMenu()],
+              ),
+            ),
             const SelectedTodoText(),
             const SelectedTodoActions(),
             BlocSelector<TodoOverviewBloc, TodosOverviewState,
@@ -154,5 +159,29 @@ class SelectedTodoActions extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class TodoFilterDropdownMenu extends StatelessWidget {
+  const TodoFilterDropdownMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<TodoOverviewBloc, TodosOverviewState, String>(
+        selector: (state) => state.filterOption,
+        builder: (context, filterOption) {
+          return DropdownMenu(
+              label: const Text('狀態'),
+              leadingIcon: const Icon(Icons.filter_list),
+              inputDecorationTheme:
+                  const InputDecorationTheme(disabledBorder: InputBorder.none),
+              initialSelection: 'all',
+              onSelected: (value) {
+                if (value != null) {
+                  context.read<TodoOverviewBloc>().add(TodoFilterChange(value));
+                }
+              },
+              dropdownMenuEntries: filterMenu);
+        });
   }
 }

@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import '../todo/todo.api.dart';
 
@@ -26,7 +25,17 @@ final class TodosOverviewState {
       this.filterOption = 'all'});
 
   List<Todo> get shouldShowTodos {
-    return todos;
+    TodoState? filterState;
+    for (var s in TodoState.values) {
+      if (filterOption == s.value) {
+        filterState = s;
+      }
+    }
+    List<Todo> list = todos;
+    if (filterState != null) {
+      list = todos.where((e) => e.state == filterState).toList();
+    }
+    return list;
   }
 
   TodosOverviewState copyWith(
@@ -42,7 +51,7 @@ final class TodosOverviewState {
   }
 
   @override
-  int get hashCode => Object.hash(status, todos);
+  int get hashCode => Object.hash(status, todos, selectedTodo, filterOption);
 
   @override
   bool operator ==(Object other) {
@@ -50,7 +59,8 @@ final class TodosOverviewState {
         other.runtimeType == runtimeType &&
         other.hashCode == hashCode &&
         other.status == status &&
+        other.todos == todos &&
         other.selectedTodo == selectedTodo &&
-        other.todos == todos;
+        other.filterOption == filterOption;
   }
 }
