@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Uri _apiUri(String path, [Map<String, dynamic>? query]) {
@@ -18,7 +19,7 @@ class Todo {
   final String id;
   final String title;
   final String content;
-  final String state;
+  final TodoState state;
   final bool deleted;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -46,13 +47,21 @@ class Todo {
             id: id,
             title: title,
             content: content,
-            state: state,
+            state: TodoState.fromJson(state),
             deleted: deleted,
             createdAt: DateTime.parse(createdAt),
             updatedAt: DateTime.parse(updatedAt),
           ),
         _ => throw const FormatException('Failed convert todo from JSON.')
       };
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Todo && other.id == id;
+  }
 }
 
 class FetchAllQuery {
@@ -99,8 +108,11 @@ class FetchAllQuery {
 }
 
 Future<Iterable<Todo>> fetchAll([FetchAllQuery? query]) async {
-  final res = await http.get(_apiUri('todos', query?.toQuery()));
+  final res = await http
+      .get(_apiUri('todos', query?.toQuery()))
+      .timeout(Durations.long2);
   if (_isOk(res.statusCode)) {
+    await Future.delayed(Durations.extralong2);
     var todos = jsonDecode(res.body) as List<dynamic>;
     return todos.map((e) => Todo.fromJson(e as Map<String, dynamic>));
   }
@@ -147,4 +159,31 @@ Future<Todo> update(String id,
     return Todo.fromJson(todo as Map<String, dynamic>);
   }
   throw HttpException('[Todo.update] ${res.statusCode} ${res.body}');
+}
+
+enum TodoState {
+  pending(value: 'Pending', label: '待處理', icon: Icons.pending),
+  progress(value: 'Progress', label: '進行中', icon: Icons.directions_run),
+  resolved(value: 'Resolved', label: '已完成', icon: Icons.done);
+
+  final String value;
+  final String label;
+  final IconData icon;
+
+  const TodoState(
+      {required this.value, required this.label, required this.icon});
+
+  static TodoState fromJson(String val) {
+    final a = {
+      TodoState.pending.value: TodoState.pending,
+      TodoState.progress.value: TodoState.progress,
+      TodoState.resolved.value: TodoState.resolved,
+    }[val];
+    if (a == null) {
+      throw const FormatException('[TodoState.fromJson]: Invalid state.');
+    }
+    return a;
+  }
+
+  String toJson() => value;
 }
