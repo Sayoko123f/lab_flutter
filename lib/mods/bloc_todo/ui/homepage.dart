@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../todo_state.dart';
@@ -117,6 +118,15 @@ class SelectedTodoActions extends StatelessWidget {
     }, builder: (context, state) {
       return Row(
         children: [
+          TextButton.icon(
+              onPressed: () {
+                debugPrint('新增');
+                context.pushNamed('todo_new');
+              },
+              icon: const Icon(
+                Icons.add,
+              ),
+              label: const Text('新增')),
           TextButton.icon(
               onPressed: state == null
                   ? null
