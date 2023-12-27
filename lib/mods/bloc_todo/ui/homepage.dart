@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import '../todo_state.dart';
 import '../todo_bloc.dart';
 import '../todo_event.dart';
-import '../../todo/todo.api.dart' show Todo;
+import '../todo.api.dart' show Todo;
 
 class TodoHomePage extends StatelessWidget {
   const TodoHomePage({super.key});

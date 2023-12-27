@@ -7,7 +7,7 @@ import './todo_event.dart';
 import './todo_repository.dart';
 import './todo_state.dart';
 
-import '../todo/todo.api.dart' as api;
+import 'todo.api.dart' as api;
 
 class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
   final TodosRepository _todosRepository;

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../mods/bloc_todo/ui/homepage.dart' show TodoHomePage;
 import '../mods/bloc_todo/ui/create_page.dart' show CreatePage;
 import '../mods/bloc_todo/ui/edit_page.dart' show EditPage;
-import '../mods/todo/todo.api.dart' show Todo;
+import '../mods/bloc_todo/todo.api.dart' show Todo;
 
 // GoRouter configuration
 final router = GoRouter(
@@ -27,24 +27,5 @@ final router = GoRouter(
         return EditPage(todo);
       },
     ),
-    // GoRoute(
-    //     path: '/todo/:id',
-    //     redirect: (context, state) {
-    //       var todos = todoStore.todos
-    //           .where((element) => element.id == state.pathParameters['id']);
-    //       try {
-    //         todoStore.selectedTodo = todos.single;
-    //       } on StateError {
-    //         return '/';
-    //       }
-    //       return null;
-    //     },
-    //     builder: (context, state) => const TodoDetailScreen()),
-    // GoRoute(
-    //     path: '/todo/:id/edit',
-    //     name: 'todo.edit',
-    //     redirect: (context, state) =>
-    //         todoStore.selectedTodo == null ? '/' : null,
-    //     builder: (context, state) => const TodoEditScreen())
   ],
 );

@@ -1,4 +1,4 @@
-import '../todo/todo.api.dart' show Todo;
+import 'todo.api.dart' show Todo;
 
 sealed class TodoEvent {
   const TodoEvent();

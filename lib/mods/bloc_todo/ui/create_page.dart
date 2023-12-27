@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../todo_bloc.dart';
 import '../todo_event.dart';
-import '../../todo/todo.api.dart' as api;
+import '../todo.api.dart' as api;
 
 class CreatePage extends StatelessWidget {
   const CreatePage({super.key});
