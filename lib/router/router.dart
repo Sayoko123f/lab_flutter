@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../mods/bloc_todo/ui/homepage.dart' show TodoHomePage;
 import '../mods/bloc_todo/ui/create_page.dart' show CreatePage;
+import '../mods/bloc_todo/ui/edit_page.dart' show EditPage;
+import '../mods/todo/todo.api.dart' show Todo;
 
 // GoRouter configuration
 final router = GoRouter(
@@ -16,6 +18,14 @@ final router = GoRouter(
       path: '/newtodo',
       name: 'todo_new',
       builder: (context, state) => const CreatePage(),
+    ),
+    GoRoute(
+      path: '/edittodo',
+      name: 'todo_edit',
+      builder: (context, state) {
+        Todo todo = state.extra as Todo;
+        return EditPage(todo);
+      },
     ),
     // GoRoute(
     //     path: '/todo/:id',

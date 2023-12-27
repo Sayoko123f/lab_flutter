@@ -115,7 +115,7 @@ class SelectedTodoActions extends StatelessWidget {
     return BlocSelector<TodoOverviewBloc, TodosOverviewState, Todo?>(
         selector: (state) {
       return state.selectedTodo;
-    }, builder: (context, state) {
+    }, builder: (context, todo) {
       return Row(
         children: [
           TextButton.icon(
@@ -128,23 +128,24 @@ class SelectedTodoActions extends StatelessWidget {
               ),
               label: const Text('新增')),
           TextButton.icon(
-              onPressed: state == null
+              onPressed: todo == null
                   ? null
                   : () {
-                      debugPrint('編輯 ${state.id}');
+                      debugPrint('編輯 ${todo.id}');
+                      context.pushNamed('todo_edit', extra: todo);
                     },
               icon: const Icon(
                 Icons.edit,
               ),
               label: const Text('編輯')),
           TextButton.icon(
-              onPressed: state == null
+              onPressed: todo == null
                   ? null
                   : () {
-                      debugPrint('刪除 ${state.id}');
+                      debugPrint('刪除 ${todo.id}');
                       context
                           .read<TodoOverviewBloc>()
-                          .add(TodoDeleted(state.id));
+                          .add(TodoDeleted(todo.id));
                     },
               icon: const Icon(Icons.delete),
               label: const Text('刪除')),

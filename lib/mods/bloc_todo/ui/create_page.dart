@@ -71,7 +71,7 @@ class _TodoFormState extends State<TodoForm> {
               },
             ),
             TextFormField(
-              initialValue: data.title,
+              initialValue: data.content,
               validator: (val) {
                 if (val == null || val.isEmpty) {
                   return "請填寫內容";
