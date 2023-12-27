@@ -35,10 +35,10 @@ class TodoOverviewBloc extends Bloc<TodoEvent, TodosOverviewState> {
 
   void _onSelect(TodoSelected event, Emitter emit) {
     if (event.todo == state.selectedTodo) {
-      emit(state.copyWith(selectedTodo: null, shouldRebuildList: false));
+      emit(state.copyWith(selectedTodo: null));
       return;
     }
-    emit(state.copyWith(selectedTodo: event.todo, shouldRebuildList: false));
+    emit(state.copyWith(selectedTodo: event.todo));
   }
 
   Future<void> _onDelete(TodoDeleted event, Emitter emit) async {

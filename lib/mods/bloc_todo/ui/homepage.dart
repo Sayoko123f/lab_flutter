@@ -26,11 +26,11 @@ class TodoHomePage extends StatelessWidget {
           children: [
             const SelectedTodoText(),
             const SelectedTodoActions(),
-            BlocBuilder<TodoOverviewBloc, TodosOverviewState>(
-                buildWhen: (prev, next) {
-              return next.shouldRebuildList;
-            }, builder: (context, state) {
-              final isLoading = state.status == TodosOverviewStatus.loading;
+            BlocSelector<TodoOverviewBloc, TodosOverviewState,
+                TodosOverviewStatus>(selector: (state) {
+              return state.status;
+            }, builder: (context, status) {
+              final isLoading = status == TodosOverviewStatus.loading;
               return Expanded(
                   child: isLoading
                       ? const Center(
@@ -39,7 +39,7 @@ class TodoHomePage extends StatelessWidget {
                             semanticsLabel: '讀取中',
                           ),
                         )
-                      : TodoList(state.todos));
+                      : const TodoList());
             })
           ],
         ),
@@ -49,18 +49,20 @@ class TodoHomePage extends StatelessWidget {
 }
 
 class TodoList extends StatelessWidget {
-  final List<Todo> list;
-
-  const TodoList(this.list, {super.key});
+  const TodoList({super.key});
 
   @override
   Widget build(BuildContext context) {
     debugPrint('TodoList build.');
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: list.length,
-      itemBuilder: (context, index) => TodoItem(list[index]),
-    );
+    return BlocSelector<TodoOverviewBloc, TodosOverviewState, List<Todo>>(
+        selector: (state) => state.shouldShowTodos,
+        builder: (context, shouldShowTodos) {
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: shouldShowTodos.length,
+            itemBuilder: (context, index) => TodoItem(shouldShowTodos[index]),
+          );
+        });
   }
 }
 
